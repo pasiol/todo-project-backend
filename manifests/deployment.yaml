@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: pasiol/todo-project-backend@sha256:d5a41e97ddca28e15603f9413fae6e0f53e3d88213cd8401fb0fd68fdaa1dbee
+          image: pasiol/todo-project-backend@sha256:aec26fce913e6046e9ae34a3b09c6fb354b451c24faff3de77d507347d9758b7
           env:
             - name: APP_PORT
               value: "8888"

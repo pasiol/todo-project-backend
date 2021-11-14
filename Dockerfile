@@ -24,8 +24,7 @@ FROM dev as build
 RUN (([ ! -d "${APP_PATH}/vendor" ] && go mod download && go mod vendor) || true)
 RUN GIT_COMMIT=$(git rev-list -1 HEAD) && \
     BUILD=$(date +%FT%T%z) && \
-RUN go build -ldflags=-s -w" 'main.Version=${GIT_COMMIT}' -X main.Build=${BUILD}" -mod vendor -o ${APP_BUILD_NAME}
-RUN go build -ldflags="-s -w" -mod vendor -o ${APP_BUILD_NAME}
+    go build -ldflags="-s -w -X 'main.Version=${GIT_COMMIT}' -X main.Build=${BUILD}" -mod vendor -o ${APP_BUILD_NAME} .
 RUN chmod +x ${APP_BUILD_NAME}
 
 FROM debian:10-slim AS prod
