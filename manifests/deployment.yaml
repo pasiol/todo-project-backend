@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-project-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-project-backend
+  template:
+    metadata:
+      labels:
+        app: todo-project-backend
+    spec:
+      containers:
+        - name: backend
+          image: pasiol/todo-project-backend@sha256:d5a41e97ddca28e15603f9413fae6e0f53e3d88213cd8401fb0fd68fdaa1dbee
+          env:
+            - name: APP_PORT
+              value: "8888"
+            - name: ALLOWED_ORIGINS
+              value: *
