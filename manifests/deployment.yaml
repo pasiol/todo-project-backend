@@ -19,4 +19,4 @@ spec:
             - name: APP_PORT
               value: "8888"
             - name: ALLOWED_ORIGINS
-              value: "*"
+              value: "http://todo.local"
