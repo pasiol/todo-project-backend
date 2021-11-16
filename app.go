@@ -28,13 +28,9 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/todos", a.postTodo).Methods("POST")
 }
 
-func OriginValidator(_ string) bool {
-	return true
-}
-
 func (a *App) Run() {
 
-	headers := handlers.AllowedHeaders([]string{"Access-Control-Allow-Origin", "Content-Type", "Authorization", "Origin"})
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type"})
 	origins := handlers.AllowedOrigins([]string{os.Getenv("ALLOWED_ORIGINS")})
 	methods := handlers.AllowedMethods([]string{http.MethodGet, http.MethodOptions, http.MethodConnect, http.MethodPost})
 	maxAge := handlers.MaxAge(60)
