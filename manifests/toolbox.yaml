@@ -4,6 +4,7 @@ metadata:
   name: toolbox
   labels:
     app: toolbox
+  namespace: todo-project
 spec:
   containers:
     - image: pasiol/debian-slim-toolbox@sha256:9764ab8bb902f2dd0714a0fbe26d3886d40ad83ef005740bf9c81ffa5a13154b
