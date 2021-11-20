@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +13,7 @@ import (
 
 type App struct {
 	Router *mux.Router
+	DB     *gorm.DB
 }
 
 func (a *App) Initialize() {
@@ -19,6 +21,11 @@ func (a *App) Initialize() {
 	if err != nil {
 		log.Print("Reading environment failed.")
 	}
+	a.DB, err = initializeDb()
+	if err != nil {
+		log.Fatalf("initializing database failed: %s", err)
+	}
+
 	a.Router = mux.NewRouter()
 	a.initializeRoutes()
 }

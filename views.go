@@ -26,7 +26,7 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 }
 
 func (a *App) getTodos(w http.ResponseWriter, _ *http.Request) {
-	todos, err := searchTodos()
+	todos, err := a.searchTodos()
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -50,7 +50,7 @@ func (a *App) postTodo(w http.ResponseWriter, r *http.Request) {
 		}
 	}(r.Body)
 
-	if err := insertTodo(t); err != nil {
+	if err := a.insertTodo(t); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}

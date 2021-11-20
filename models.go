@@ -1,7 +1,12 @@
 package main
 
+import "gorm.io/gorm"
+
 type Todo struct {
-	Task string `bson:"task" json:"task"`
+	gorm.Model
+	Task string `gorm:"check:task_checker,task <> ''"`
 }
 
-var Todos []Todo
+type APITodo struct {
+	Task string
+}
