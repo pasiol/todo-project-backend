@@ -6,3 +6,5 @@ metadata:
 data:
   env.properties: |
     POSTGRES_HOST=todo-project-backend-db
+    APP_PORT="8888"
+    ALLOWED_ORIGINS="http://todo.local"

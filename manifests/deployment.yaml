@@ -28,10 +28,6 @@ spec:
               name: env-file
               subPath: ".env"
           env:
-            - name: APP_PORT
-              value: "8888"
-            - name: ALLOWED_ORIGINS
-              value: "http://todo.local"
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
