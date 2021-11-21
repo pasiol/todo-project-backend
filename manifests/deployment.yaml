@@ -32,8 +32,6 @@ spec:
               value: "8888"
             - name: ALLOWED_ORIGINS
               value: "http://todo.local"
-            - name: POSTGRES_HOST
-              value: POSTGRES_HOST
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -49,5 +47,3 @@ spec:
                   secretKeyRef:
                     name: postgres
                     key: POSTGRES_DB
-              - name: POSTGRES_HOST
-                value: POSTGRES_HOST
