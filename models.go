@@ -8,5 +8,5 @@ type Todo struct {
 }
 
 type APITodo struct {
-	Task string
+	Task string `json:"task"`
 }
