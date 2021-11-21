@@ -1,15 +1,15 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: pingpong-pv
+  name: todo-project-backend-pv
   namespace: applications
   labels:
     type: local
 spec:
   capacity:
     storage: 1Gi
-  storageClassName: pingpong
+  storageClassName: todo-project
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /data/pingpong
+    path: /data/todo

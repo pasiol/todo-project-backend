@@ -1,15 +1,15 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pingpong-pvc
-  namespace: applications
+  name: todo-project-pvc
+  namespace: todo-project
   labels:
     type: local
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: pingpong
+  storageClassName: todo-project
   resources:
     requests:
       storage: 1Gi
-  volumeName: pingpong-pv
+  volumeName: todo-project-pv
