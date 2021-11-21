@@ -51,7 +51,7 @@ func (a *App) postTodo(w http.ResponseWriter, r *http.Request) {
 	}(r.Body)
 
 	if err := a.insertTodo(t); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 

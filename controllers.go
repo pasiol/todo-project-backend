@@ -36,7 +36,8 @@ func (a *App) searchTodos() ([]APITodo, error) {
 }
 
 func (a *App) insertTodo(newTodo Todo) error {
-	if len(newTodo.Task) > 0 {
+	l := len(newTodo.Task)
+	if l > 0 && l < 141 {
 		result := a.DB.Create(&newTodo)
 		if result.Error != nil {
 			return result.Error
@@ -44,6 +45,6 @@ func (a *App) insertTodo(newTodo Todo) error {
 		log.Printf("created a new todo %s", newTodo.Task)
 		return nil
 	} else {
-		return errors.New("cannot save the empty task")
+		return errors.New("task length should be between [1,140] characters")
 	}
 }
