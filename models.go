@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Todo struct {
 	gorm.Model
-	Task string `gorm:"check:task_checker,task <> ''"`
+	Task string `json:"task"`
 }
 
 type APITodo struct {
