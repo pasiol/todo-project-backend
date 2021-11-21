@@ -20,7 +20,7 @@ func initializeDb() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	log.Printf("connected to db: %v", db.ConnPool)
 	return db, err
 }
 
