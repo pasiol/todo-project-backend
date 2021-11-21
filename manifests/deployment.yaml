@@ -13,11 +13,41 @@ spec:
       labels:
         app: todo-project-backend
     spec:
+      volumes:
+        - name: env-file
+          configMap:
+            name: todo-db-host
+            items:
+              - key: env.properties
+                path: ".env"
       containers:
         - name: backend
           image: pasiol/todo-project-backend@sha256:57c7ae544af1482f1e8c5e7bfc52a11db206b247bc080f68efcfa82c81310127
+          volumeMounts:
+            - mountPath: "/var/app/.env"
+              name: env-file
+              subPath: ".env"
           env:
             - name: APP_PORT
               value: "8888"
             - name: ALLOWED_ORIGINS
               value: "http://todo.local"
+            - name: POSTGRES_HOST
+              value: POSTGRES_HOST
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: POSTGRES_USER
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres
+                    key: POSTGRES_PASSWORD
+              - name: POSTGRES_DB
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres
+                    key: POSTGRES_DB
+              - name: POSTGRES_HOST
+                value: POSTGRES_HOST
