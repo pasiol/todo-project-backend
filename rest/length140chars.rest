@@ -1,0 +1,6 @@
+POST http://localhost:8888/todos HTTP/1.1
+content-type: application/json
+
+{
+  "task": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus sem eu aliquet molestie. Nulla eget dui vel eros euismod orci aliquam."
+}
