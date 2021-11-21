@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-project-backend-db
+  namespace: todo-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-project-backend-db
+  template:
+    metadata:
+      labels:
+        app: todo-project-backend-db
+    spec:
+      containers:
+        - name: todo-project-backend-db
+          image: pasiol/postgres@sha256:bfc952e11e0202b0a55860d07b202f969da426b1447b0da21a5efdc65ea90a9f
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: POSTGRES_DB
+          volumeMounts:
+            - name: postgres-volume-mount
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-volume-mount
+          persistentVolumeClaim:
+            claimName: todo-project-pvc
