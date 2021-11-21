@@ -22,24 +22,24 @@ spec:
                 path: ".env"
       containers:
         - name: backend
-          image: pasiol/todo-project-backend@sha256:57c7ae544af1482f1e8c5e7bfc52a11db206b247bc080f68efcfa82c81310127
-          volumeMounts:
-            - mountPath: "/var/app/.env"
-              name: env-file
-              subPath: ".env"
           env:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   name: postgres
                   key: POSTGRES_USER
-              - name: POSTGRES_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: postgres
-                    key: POSTGRES_PASSWORD
-              - name: POSTGRES_DB
-                valueFrom:
-                  secretKeyRef:
-                    name: postgres
-                    key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: POSTGRES_DB
+          image: pasiol/todo-project-backend@sha256:57c7ae544af1482f1e8c5e7bfc52a11db206b247bc080f68efcfa82c81310127
+          volumeMounts:
+            - mountPath: "/var/app/.env"
+              name: env-file
+              subPath: ".env"
