@@ -22,6 +22,7 @@ spec:
                 path: ".env"
       containers:
         - name: backend
+          image: PROJECT/IMAGE
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -38,7 +39,6 @@ spec:
                 secretKeyRef:
                   name: postgres
                   key: POSTGRES_DB
-          image: backend
           volumeMounts:
             - mountPath: "/var/app/.env"
               name: env-file

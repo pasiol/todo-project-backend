@@ -5,4 +5,4 @@ resources:
 
 images:
   - name: backend
-    newName: gcr.io/pasiol/todo-project-backend
+    newName: todo-project-backend
