@@ -4,5 +4,5 @@ resources:
   - manifests/deployment.yaml
 
 images:
-  - name: backend
+  - name: PROJECT/IMAGE
     newName: todo-project-backend
