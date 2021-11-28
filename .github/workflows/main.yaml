@@ -41,7 +41,7 @@ jobs:
         AGE_SECRET_KEY: ${{ secrets.AGE-SECRET-KEY }}
       run: |
         mkdir -p ~/.config/sops/age
-        echo '$AGE-SECRET-KEY' > ~/.config/sops/age/keys.txt
+        echo $AGE-SECRET-KEY > ~/.config/sops/age/keys.txt
         cat ~/.config/sops/age/keys.txt
         export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
         sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
