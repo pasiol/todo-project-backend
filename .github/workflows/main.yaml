@@ -39,6 +39,7 @@ jobs:
       id: install
     - name: Deploy
       run: |-
+        mkdir -p ~/.config/sops/age
         echo $SOPS_AGE_RECIPIENTS > ~/.config/sops/age/keys.txt
         sops --decrypt ./manifests/secret.enc.yaml >./manifests/secret.yaml
         kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
