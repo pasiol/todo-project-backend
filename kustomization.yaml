@@ -7,7 +7,3 @@ resources:
   - manifests/postgres/service.yaml
   - manifests/deployment.yaml
   - manifests/service.yaml
-
-images:
-  - name: PROJECT/IMAGE
-    newName: todo-project-backend
