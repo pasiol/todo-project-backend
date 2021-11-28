@@ -36,7 +36,8 @@ spec:
           volumeMounts:
             - name: postgres-volume-mount
               mountPath: /var/lib/postgresql/data
+              subPath: postgres
       volumes:
         - name: postgres-volume-mount
           persistentVolumeClaim:
-            claimName: todo-project-pvc
+            claimName: todo-project-backend-pvc

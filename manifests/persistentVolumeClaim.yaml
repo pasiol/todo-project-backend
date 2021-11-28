@@ -1,15 +1,11 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: todo-project-pvc
+  name: todo-project-backend-pvc
   namespace: todo-project
-  labels:
-    type: local
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: todo-project
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
-  volumeName: todo-project-backend-pv
+      storage: 100Mi
