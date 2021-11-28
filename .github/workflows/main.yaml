@@ -46,5 +46,5 @@ jobs:
         #sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
         kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
         kustomize build . | kubectl apply -f -
-        kubectl rollout status $IMAGE --namespace=todo-project
+        kubectl rollout status gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA --namespace=todo-project
         kubectl get services -o wide --namespace=todo-project
