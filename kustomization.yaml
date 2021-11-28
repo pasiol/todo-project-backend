@@ -9,3 +9,7 @@ resources:
   - manifests/postgres/service.yaml
   - manifests/deployment.yaml
   - manifests/service.yaml
+
+images:
+  - name: backend
+    newName: gcr.io/pasiol/todo-project-backend

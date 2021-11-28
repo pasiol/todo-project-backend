@@ -38,7 +38,7 @@ spec:
                 secretKeyRef:
                   name: postgres
                   key: POSTGRES_DB
-          image: pasiol/todo-project-backend@sha256:57c7ae544af1482f1e8c5e7bfc52a11db206b247bc080f68efcfa82c81310127
+          image: backend
           volumeMounts:
             - mountPath: "/var/app/.env"
               name: env-file
