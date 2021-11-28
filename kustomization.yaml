@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - manifests/persistentVolumeClaim.yaml
   - manifests/configMap.yaml
+  - manifests/secret.yaml
   - manifests/postgres/deployment.yaml
   - manifests/postgres/service.yaml
   - manifests/deployment.yaml
