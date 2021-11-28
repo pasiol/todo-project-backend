@@ -21,7 +21,7 @@ spec:
               - key: env.properties
                 path: ".env"
       containers:
-        - name: backend
+        - name: todo-project-backend
           image: PROJECT/IMAGE
           env:
             - name: POSTGRES_USER
