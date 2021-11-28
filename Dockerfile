@@ -26,8 +26,7 @@ RUN GIT_COMMIT=$(git rev-list -1 HEAD) && \
     go build -ldflags="-s -w -X 'main.Version=${GIT_COMMIT}' -X main.Build=${BUILD}" -mod vendor -o ${APP_BUILD_NAME} .
 RUN chmod +x ${APP_BUILD_NAME}
 
-FROM debian:10-slim AS prod
-RUN apt update -y && apt install -y curl iproute2
+FROM scratch AS prod
 
 ENV APP_BUILD_PATH="/var/app" \
     APP_BUILD_NAME="backend"
