@@ -22,7 +22,7 @@ spec:
                 path: ".env"
       containers:
         - name: todo-project-backend
-          image: PROJECT/IMAGE
+          image: cgr.io/PROJECT/IMAGE
           env:
             - name: POSTGRES_USER
               valueFrom:
