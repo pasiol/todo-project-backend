@@ -31,9 +31,14 @@ jobs:
       run: docker push "gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
     - name: Set up Kustomize
       uses: imranismail/setup-kustomize@v1
+    - name: Sops Binary Installer
+      uses: mdgreenwald/mozilla-sops-action@v1.1.0
+      with:
+        version: '<version>' # default is latest stable
+      id: install
     - name: Deploy
       run: |-
-        sops -e --age age1kdhxyxzul9q095wq9rc3hfkc4ukt2yze2474f46pk84wl5c7l4kqlxurfl ./manifests/secret.enc.yaml >./manifests/secret.yaml
+        sops --decrypt ./manifests/secret.enc.yaml >./manifests/secret.yaml
         kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
         kustomize build . | kubectl apply -f -
         kubectl rollout status deployment $IMAGE
