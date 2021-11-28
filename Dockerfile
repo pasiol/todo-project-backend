@@ -1,8 +1,7 @@
-
 ARG GO_VERSION=1.16
-FROM golang:${GO_VERSION}-alpine AS dev
+FROM golang:${GO_VERSION}-buster AS dev
 
-RUN apk add --no-cache ca-certificates git
+RUN apt install -y ca-certificates git
 
 ENV APP_NAME="backend" \
     APP_PATH="/var/app"
