@@ -36,15 +36,14 @@ jobs:
       with:
         version: '3.7.1'
       id: install
-    - shell: bash
+    - name: Deploy
       env:
         AGE_SECRET_KEY: ${{ secrets.AGE_SECRET_KEY }}
-      run: |
-        'echo "$AGE_SECRET_KEY" > ./key'
-        export SOPS_AGE_KEY_FILE=./key
-        sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
-    - name: Deploy
       run: |-
+        #touch ./key
+        #'echo "$AGE_SECRET_KEY" > ./key'
+        #export SOPS_AGE_KEY_FILE=./key
+        #sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
         kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
         kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$IMAGE --namespace=todo-project
