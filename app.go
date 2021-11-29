@@ -37,7 +37,7 @@ func (a *App) initializeRoutes() {
 
 func (a *App) Run() {
 
-	headers := handlers.AllowedHeaders([]string{"Content-Type"})
+	headers := handlers.AllowedHeaders([]string{"Access-Control-Allow-Origin", "Content-Type", "Origin"})
 	origins := handlers.AllowedOrigins([]string{fmt.Sprintf("http://%s", os.Getenv("ALLOWED_ORIGINS"))})
 	methods := handlers.AllowedMethods([]string{http.MethodGet, http.MethodOptions, http.MethodConnect, http.MethodPost})
 	maxAge := handlers.MaxAge(60)
