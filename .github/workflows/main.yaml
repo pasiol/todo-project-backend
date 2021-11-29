@@ -38,12 +38,8 @@ jobs:
         version: '3.7.1'
       id: install
     - name: Create key file
-      uses: DamianReeves/write-file-action@v1.0
-      with:
-        path: /home/runner/key
-        contents: |
-          echo "$AGE_SECRET_KEY"
-        write-mode: overwrite
+      run: |
+        printf "$AGE_SECRET_KEY" > /home/runner/key
     - name: Deploy
       run: |-
         cat /home/runner/key
