@@ -40,9 +40,8 @@ jobs:
       env:
         AGE_SECRET_KEY: ${{ secrets.AGE_SECRET_KEY }}
       run: |
-        mkdir -p ~/.config/sops/age
-        'echo "$AGE_SECRET_KEY" > key'
-        export SOPS_AGE_KEY_FILE=key
+        'echo "$AGE_SECRET_KEY" > ./key'
+        export SOPS_AGE_KEY_FILE=./key
         sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
     - name: Deploy
       run: |-
