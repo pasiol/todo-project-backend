@@ -7,4 +7,4 @@ data:
   env.properties: |
     POSTGRES_HOST=todo-project-backend-db-svc
     APP_PORT="8888"
-    ALLOWED_ORIGINS=todo-project-backend-svc
+    ALLOWED_ORIGINS=todo-project-svc
