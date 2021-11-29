@@ -40,10 +40,9 @@ jobs:
       env:
         AGE_SECRET_KEY: ${{ secrets.AGE_SECRET_KEY }}
       run: |-
-        #touch ./key
-        #'echo "$AGE_SECRET_KEY" > ./key'
-        #export SOPS_AGE_KEY_FILE=./key
-        #sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+        'echo "$AGE_SECRET_KEY" >> ./key'
+        export SOPS_AGE_KEY_FILE=./key
+        sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
         kubectl create namespace ${GITHUB_REF#refs/heads/} || true
         kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
         kustomize edit set namespace ${GITHUB_REF#refs/heads/}
