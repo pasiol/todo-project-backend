@@ -46,6 +46,7 @@ jobs:
         write-mode: overwrite
     - name: Deploy
       run: |-
+        cat /home/runner/key
         export SOPS_AGE_KEY_FILE=/home/runner/key
         sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
         kubectl create namespace ${GITHUB_REF#refs/heads/} || true
