@@ -42,9 +42,8 @@ jobs:
         printf "$AGE_SECRET_KEY" > /home/runner/key
     - name: Deploy
       run: |-
-        cat /home/runner/key
         export SOPS_AGE_KEY_FILE=/home/runner/key
-        sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+        sops --age -d -i ./manifests/secret.enc.yaml
         kubectl create namespace ${GITHUB_REF#refs/heads/} || true
         kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
         kustomize edit set namespace ${GITHUB_REF#refs/heads/}
