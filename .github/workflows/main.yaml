@@ -8,6 +8,7 @@ env:
   GKE_CLUSTER: dwk-cluster
   GKE_ZONE: europe-north1-b
   IMAGE: todo-project-backend
+  AGE_SECRET_KEY: ${{ secrets.AGE_SECRET_KEY }}
 
 jobs:
   build-publish-deploy:
@@ -36,12 +37,16 @@ jobs:
       with:
         version: '3.7.1'
       id: install
+    - name: Create key file
+      uses: DamianReeves/write-file-action
+      with:
+        path: ${{ env.home }}/key
+        contents: |
+          echo $AGE_SECRET_KEY
+        write-mode: overwrite
     - name: Deploy
-      env:
-        AGE_SECRET_KEY: ${{ secrets.AGE_SECRET_KEY }}
       run: |-
-        'echo "$AGE_SECRET_KEY" >> $PWD/manifests/key'
-        export SOPS_AGE_KEY_FILE=$PWD/manifests/key
+        export SOPS_AGE_KEY_FILE=${{ env.home }}/key
         sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
         kubectl create namespace ${GITHUB_REF#refs/heads/} || true
         kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
