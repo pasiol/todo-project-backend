@@ -42,7 +42,7 @@ jobs:
       with:
         path: /home/runner/key
         contents: |
-          echo $AGE_SECRET_KEY
+          echo "$AGE_SECRET_KEY"
         write-mode: overwrite
     - name: Deploy
       run: |-
