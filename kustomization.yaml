@@ -1,7 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - manifests/secret.enc.yaml
   - manifests/persistentVolumeClaim.yaml
   - manifests/configMap.yaml
   - manifests/postgres/deployment.yaml
