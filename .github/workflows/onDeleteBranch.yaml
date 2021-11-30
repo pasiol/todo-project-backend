@@ -1,6 +1,7 @@
 name: remove namespace on delete
 
-on: [delete]
+on:
+  delete
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -8,7 +9,7 @@ env:
   GKE_ZONE: europe-north1-b
 
 jobs:
-  deploy:
+  delete:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Cloud SDK
