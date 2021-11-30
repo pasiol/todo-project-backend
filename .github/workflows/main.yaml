@@ -37,13 +37,11 @@ jobs:
       with:
         version: '3.7.1'
       id: install
-    - name: Create key file
-      run: |
         printf "$AGE_SECRET_KEY" > /home/runner/key
     - name: Deploy
       run: |-
         export SOPS_AGE_KEY_FILE=/home/runner/key
-        sops --age -d ./manifests/secret.enc.yaml ./manifests/secret.yaml
+        sops --age -d ./manifests/secret.enc.yaml | kubectl -n todo-project apply -f
         kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
         kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$IMAGE --namespace=todo-project
