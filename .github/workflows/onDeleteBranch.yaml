@@ -18,6 +18,7 @@ jobs:
           project_id: ${{ secrets.GKE_PROJECT }}
           service_account_key: ${{ secrets.GKE_SA_KEY }}
           export_default_credentials: true
+      - run: gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
       - name: Delete namespace
         run: |-
           kubectl delete namespace ${GITHUB_REF#refs/heads/}
