@@ -8,6 +8,7 @@ env:
   GKE_CLUSTER: dwk-cluster
   GKE_ZONE: europe-north1-b
   IMAGE: todo-project-backend
+  AGE_SECRET_KEY: ${{ secrets.AGE_SECRET_KEY }}
 
 jobs:
   build-publish-deploy:
@@ -36,14 +37,12 @@ jobs:
       with:
         version: '3.7.1'
       id: install
+    - name: create key file
+      run: |
+        printf "$AGE_SECRET_KEY" > /home/runner/key
     - name: Deploy
-      env:
-        AGE_SECRET_KEY: ${{ secrets.AGE_SECRET_KEY }}
       run: |-
-        #touch ./key
-        #'echo "$AGE_SECRET_KEY" > ./key'
-        #export SOPS_AGE_KEY_FILE=./key
-        #sops --age --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+        SOPS_AGE_KEY_FILE=/home/runner/key sops -d ./manifests/secret.enc.yaml | kubectl -n todo-project apply -f -
         kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
         kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$IMAGE --namespace=todo-project
