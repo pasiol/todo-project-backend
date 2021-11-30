@@ -16,34 +16,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@master
-      with:
-        project_id: ${{ secrets.GKE_PROJECT }}
-        service_account_key: ${{ secrets.GKE_SA_KEY }}
-        export_default_credentials: true
-    - run: gcloud --quiet auth configure-docker
-    - run: gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
-    - name: Build
-      run: docker build --tag "gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" .
-    - name: Publish
-      run: docker push "gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
-    - name: Set up Kustomize
-      uses: imranismail/setup-kustomize@v1
-    - name: Sops Binary Installer
-      uses: mdgreenwald/mozilla-sops-action@v1.1.0
-      with:
-        version: '3.7.1'
-      id: install
-    - name: create key file
-      run: |
-        printf "$AGE_SECRET_KEY" > /home/runner/key
-    - name: Deploy
-      run: |-
-        SOPS_AGE_KEY_FILE=/home/runner/key sops -d ./manifests/secret.enc.yaml | kubectl -n todo-project apply -f -
-        kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
-        kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/$IMAGE --namespace=todo-project
-        kubectl get services -o wide --namespace=todo-project
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GKE_PROJECT }}
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          export_default_credentials: true
+      - run: gcloud --quiet auth configure-docker
+      - run: gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+      - name: Build
+        run: docker build --tag "gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" .
+      - name: Publish
+        run: docker push "gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v1
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1.1.0
+        with:
+          version: '3.7.1'
+        id: install
+      - name: create key file
+        run: |
+          printf "$AGE_SECRET_KEY" > /home/runner/key
+      - name: Deploy
+        run: |-
+          kubectl create namespace ${GITHUB_REF#refs/heads/} || true
+          SOPS_AGE_KEY_FILE=/home/runner/key sops -d ./manifests/secret.enc.yaml | kubectl -n ${GITHUB_REF#refs/heads/} apply -f -
+          kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
+          kustomize edit set namespace ${GITHUB_REF#refs/heads/}
+          kustomize edit set image gcr.io/PROJECT_ID/IMAGE=gcr.io/$PROJECT_ID/$IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
+          kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/$IMAGE
+          kubectl get services -o wide
