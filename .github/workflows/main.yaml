@@ -37,6 +37,8 @@ jobs:
       with:
         version: '3.7.1'
       id: install
+    - name: create key file
+      run: |
         printf "$AGE_SECRET_KEY" > /home/runner/key
     - name: Deploy
       run: |-
