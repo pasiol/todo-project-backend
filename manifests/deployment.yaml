@@ -43,3 +43,7 @@ spec:
             - mountPath: "/var/app/.env"
               name: env-file
               subPath: ".env"
+          resources:
+            limits:
+              cpu: "5m"
+              memory: "5Mi"
