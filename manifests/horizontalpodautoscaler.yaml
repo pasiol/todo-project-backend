@@ -1,7 +1,7 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cpushredder-hpa
+  name: todo-project-backend
   namespace: todo-project
 spec:
   scaleTargetRef:
