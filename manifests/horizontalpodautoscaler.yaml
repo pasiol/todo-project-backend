@@ -1,4 +1,4 @@
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: cpushredder-hpa
@@ -7,9 +7,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: cpushredder-dep
+    name: todo-project-backend
   minReplicas: 1
   maxReplicas: 6
-  behavior:
-    scaleDown:
-      stabilizationWindowSeconds: 30
+  targetCPUUtilizationPercentage: 50

@@ -45,5 +45,5 @@ spec:
               subPath: ".env"
           resources:
             limits:
-              cpu: "5m"
+              cpu: "10m"
               memory: "5Mi"
