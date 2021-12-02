@@ -12,7 +12,6 @@ jobs:
   delete:
     runs-on: ubuntu-latest
     steps:
-      - run 'echo ${GITHUB_REF#refs/heads/main}'
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
@@ -25,3 +24,4 @@ jobs:
           echo "GITHUB_SHA is ${{ github.sha }}"
           echo "GITHUB_REF is ${{ github.ref }}"
           echo "${{ github.event.ref }} - ${{ github.event.ref_type }}"
+          echo "${{GITHUB_REF#refs/heads/main}}"
