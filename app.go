@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 	"gorm.io/gorm"
 	"log"
 	"net/http"
@@ -37,15 +37,17 @@ func (a *App) initializeRoutes() {
 
 func (a *App) Run() {
 
-	headers := handlers.AllowedHeaders([]string{"Access-Control-Allow-Origin", "Content-Type", "Origin"})
-	origins := handlers.AllowedOrigins([]string{fmt.Sprintf("http://%s", os.Getenv("ALLOWED_ORIGINS"))})
-	methods := handlers.AllowedMethods([]string{http.MethodGet, http.MethodOptions, http.MethodConnect, http.MethodPost})
-	maxAge := handlers.MaxAge(60)
+	corsOptions := cors.New(cors.Options{
+		AllowedOrigins:   []string{os.Getenv("ALLOWED_ORIGINS")},
+		AllowCredentials: true,
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodOptions, http.MethodDelete},
+		Debug:            true,
+	})
 
 	address := fmt.Sprintf("0.0.0.0:%s", os.Getenv("APP_PORT"))
 	server := &http.Server{
 		Addr:    address,
-		Handler: handlers.CORS(headers, origins, methods, maxAge)(a.Router),
+		Handler: corsOptions.Handler(a.Router),
 	}
 
 	log.Printf("starting REST-backend in %s.", address)
