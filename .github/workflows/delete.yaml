@@ -24,4 +24,5 @@ jobs:
           echo "GITHUB_SHA is ${{ github.sha }}"
           echo "GITHUB_REF is ${{ github.ref }}"
           echo "${{ github.event.ref }} - ${{ github.event.ref_type }}"
-          echo ${GITHUB_REF#refs/heads/main}
+          kubectl delete namespace "${{ github.event.ref }}"
+          kubectl get namespaces
