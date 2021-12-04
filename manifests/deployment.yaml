@@ -43,3 +43,13 @@ spec:
             - mountPath: "/var/app/.env"
               name: env-file
               subPath: ".env"
+          readinessProbe:
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            httpGet:
+              path: /health
+              port: 8888
+          resources:
+            limits:
+              cpu: "10m"
+              memory: "5Mi"

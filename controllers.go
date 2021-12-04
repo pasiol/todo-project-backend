@@ -1,27 +1,40 @@
 package main
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
 	"os"
+	"time"
 )
 
-func initializeDb() (*gorm.DB, error) {
+func initializeDb() (*gorm.DB, *sql.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Europe/Helsinki", os.Getenv("POSTGRES_HOST"), os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DB"))
 	pgConf := postgres.Config{DSN: dsn, PreferSimpleProtocol: true}
 	db, err := gorm.Open(postgres.New(pgConf), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		for {
+			db, err = gorm.Open(postgres.New(pgConf), &gorm.Config{})
+			if err == nil {
+				break
+			}
+			log.Printf("database connection failed, trying again")
+			time.Sleep(time.Duration(10))
+		}
 	}
+	sqlDB, err := db.DB()
+	sqlDB.SetMaxIdleConns(2)
+	sqlDB.SetMaxOpenConns(10)
+	sqlDB.SetConnMaxLifetime(1)
 	err = db.AutoMigrate(&Todo{})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	log.Printf("connected to db: %v", db.ConnPool)
-	return db, err
+	return db, sqlDB, err
 }
 
 func (a *App) searchTodos() ([]APITodo, error) {

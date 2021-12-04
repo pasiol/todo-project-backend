@@ -34,6 +34,17 @@ func (a *App) getTodos(w http.ResponseWriter, _ *http.Request) {
 	respondWithJSON(w, http.StatusOK, todos)
 }
 
+func (a *App) getHealth(w http.ResponseWriter, _ *http.Request) {
+	err := a.Pool.Ping()
+	if err == nil {
+		respondWithJSON(w, http.StatusOK, map[string]string{"message": "ok"})
+		return
+	} else {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+}
+
 func (a *App) postTodo(w http.ResponseWriter, r *http.Request) {
 	var t Todo
 
