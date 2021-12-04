@@ -8,4 +8,4 @@ docker run --rm --name test-postgres -d -p 5432:5432 test-postgres
 sleep 10
 cd ../../..
 docker ps
-go run .
+ALLOWED_ORIGINS=http://localhost:3000 go run .
