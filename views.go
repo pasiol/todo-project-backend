@@ -74,9 +74,11 @@ func (a *App) postTodo(w http.ResponseWriter, r *http.Request) {
 func (a *App) putTodo(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	log.Printf(" %v", vars["id"])
-	id, _ := strconv.Atoi(vars["id"])
-
-	err := a.updateTodoDone(id)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+	}
+	err = a.updateTodoDone(id)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
