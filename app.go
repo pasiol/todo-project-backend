@@ -36,6 +36,7 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/health", a.getHealth).Methods("GET")
 	a.Router.HandleFunc("/todos", a.getTodos).Methods("GET")
 	a.Router.HandleFunc("/todos", a.postTodo).Methods("POST")
+	a.Router.HandleFunc("/todos/{id}", a.putTodo).Methods("PUT")
 }
 
 func (a *App) Run() {
@@ -43,7 +44,7 @@ func (a *App) Run() {
 	corsOptions := cors.New(cors.Options{
 		AllowedOrigins:   []string{os.Getenv("ALLOWED_ORIGINS")},
 		AllowCredentials: true,
-		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodOptions, http.MethodDelete},
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodOptions, http.MethodPut},
 		Debug:            true,
 	})
 

@@ -39,7 +39,7 @@ func initializeDb() (*gorm.DB, *sql.DB, error) {
 
 func (a *App) searchTodos() ([]APITodo, error) {
 	var todos []APITodo
-	result := a.DB.Model(&Todo{}).Limit(30).Find(&todos)
+	result := a.DB.Find(&Todo{}).Where("done=? OR done IS NULL", false).Limit(30).Find(&todos)
 	if result.Error != nil {
 		return []APITodo{}, result.Error
 	}
@@ -60,4 +60,16 @@ func (a *App) insertTodo(newTodo Todo) error {
 	} else {
 		return errors.New("task length should be between [1,140] characters")
 	}
+}
+
+func (a *App) updateTodoDone(id int) error {
+	log.Printf("trying to mark todo id: %d done", id)
+	result := a.DB.Find(&Todo{}, id)
+	if result.RowsAffected == 1 {
+		result = a.DB.Find(&Todo{}, id).Update("done", true)
+		if result.RowsAffected == 1 {
+			return nil
+		}
+	}
+	return errors.New("malformed request")
 }

@@ -2,9 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func respondWithError(w http.ResponseWriter, code int, message string) {
@@ -67,4 +69,17 @@ func (a *App) postTodo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, "new todo task created")
+}
+
+func (a *App) putTodo(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	log.Printf(" %v", vars["id"])
+	id, _ := strconv.Atoi(vars["id"])
+
+	err := a.updateTodoDone(id)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondWithJSON(w, http.StatusOK, id)
 }
