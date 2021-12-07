@@ -33,7 +33,7 @@ func (a *App) Initialize() {
 }
 
 func (a *App) initializeRoutes() {
-	a.Router.HandleFunc("/health", a.getHealth).Methods("GET")
+	a.Router.HandleFunc("/todos/health", a.getHealth).Methods("GET")
 	a.Router.HandleFunc("/todos", a.getTodos).Methods("GET")
 	a.Router.HandleFunc("/todos", a.postTodo).Methods("POST")
 	a.Router.HandleFunc("/todos/{id}", a.putTodo).Methods("PUT")

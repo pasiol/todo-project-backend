@@ -14,6 +14,6 @@ spec:
               env:
                 - name: API_URL
                   value: todo-project-backend-svc:8888
-              image: pasiol/markdone
+              image: pasiol/todo-markdone@sha256:21c5528198a38b131154338703a12d5b2989e6e36b58bfcd85aff14786c65a8f
               imagePullPolicy: IfNotPresent
           restartPolicy: Never

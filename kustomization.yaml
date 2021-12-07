@@ -9,6 +9,7 @@ resources:
   - manifests/postgres/service.yaml
   - manifests/deployment.yaml
   - manifests/service.yaml
+  - manifests/ingress.yaml
   - manifests/deploymentBroadcaster.yaml
   - manifests/cronjobGenerateTodos.yaml
   - manifests/cronjobMarkDone.yaml

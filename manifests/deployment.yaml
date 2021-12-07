@@ -4,7 +4,7 @@ metadata:
   name: todo-project-backend
   namespace: todo-project
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: todo-project-backend
@@ -22,7 +22,7 @@ spec:
                 path: ".env"
       containers:
         - name: todo-project-backend
-          image: pasiol/todo-project-backend@sha256:5d8323d27d0a3f235172c6fb2c47494c5d8e8c061196d9cbb18a25d2cb037105
+          image: pasiol/todo-project-backend@sha256:fe406069a67fb7b9b45e00cefcaf79f412a876f90e8636935097cb4104ba92ea
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -49,7 +49,7 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             httpGet:
-              path: /health
+              path: /todos/health
               port: 8888
           resources:
             limits:
