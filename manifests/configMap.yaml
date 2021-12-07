@@ -8,3 +8,4 @@ data:
     POSTGRES_HOST=todo-project-backend-db-svc
     APP_PORT="8888"
     ALLOWED_ORIGINS=*
+    NATS_CHANNEL=todos

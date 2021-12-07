@@ -1,3 +1,5 @@
 vendor
 .idea
 .gitignore
+secret.yaml
+secretBroadcaster.yaml

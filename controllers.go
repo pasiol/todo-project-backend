@@ -2,8 +2,10 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	nats "github.com/nats-io/nats.go"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -39,7 +41,7 @@ func initializeDb() (*gorm.DB, *sql.DB, error) {
 
 func (a *App) searchTodos() ([]APITodo, error) {
 	var todos []APITodo
-	result := a.DB.Find(&Todo{}).Where("done=? OR done IS NULL", false).Limit(30).Find(&todos)
+	result := a.DB.Find(&Todo{}).Where("done", false).Limit(30).Find(&todos)
 	if result.Error != nil {
 		return []APITodo{}, result.Error
 	}
@@ -56,6 +58,10 @@ func (a *App) insertTodo(newTodo Todo) error {
 			return result.Error
 		}
 		log.Printf("created a new todo %s", newTodo.Task)
+		err := publish2NATS(newTodo)
+		if err != nil {
+			log.Printf("publishing to NATS %s channel failed: %s", os.Getenv("NATS_CHANNEL"), err)
+		}
 		return nil
 	} else {
 		return errors.New("task length should be between [1,140] characters")
@@ -64,12 +70,39 @@ func (a *App) insertTodo(newTodo Todo) error {
 
 func (a *App) updateTodoDone(id int) error {
 	log.Printf("trying to mark todo id: %d done", id)
-	result := a.DB.Find(&Todo{}, id)
+	result := a.DB.Find(&Todo{}, id).Where("done", false)
 	if result.RowsAffected == 1 {
 		result = a.DB.Find(&Todo{}, id).Update("done", true)
 		if result.RowsAffected == 1 {
-			return nil
+			var todo Todo
+			result = a.DB.Find(&Todo{}, id).First(&todo)
+			if result.Error != nil {
+				return result.Error
+			}
+			err := publish2NATS(todo)
+			if err != nil {
+				log.Printf("publishing to NATS %s channel failed: %s", os.Getenv("NATS_CHANNEL"), err)
+			}
 		}
+
+		return nil
 	}
 	return errors.New("malformed request")
+}
+
+func publish2NATS(t Todo) error {
+	j, err := json.Marshal(t)
+	if err != nil {
+		log.Printf("marshalling todo failed: %s", err)
+	}
+	var message = string(j[:len(j)])
+	nc, err := nats.Connect(os.Getenv("NATS_URL"))
+	if err != nil {
+		return err
+	}
+	err = nc.Publish(os.Getenv("NATS_CHANNEL"), []byte(message))
+	if err != nil {
+		return err
+	}
+	return nil
 }

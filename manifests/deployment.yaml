@@ -22,7 +22,7 @@ spec:
                 path: ".env"
       containers:
         - name: todo-project-backend
-          image: gcr.io/PROJECT_ID/IMAGE
+          image: pasiol/todo-project-backend@sha256:5d8323d27d0a3f235172c6fb2c47494c5d8e8c061196d9cbb18a25d2cb037105
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -39,6 +39,8 @@ spec:
                 secretKeyRef:
                   name: postgres
                   key: POSTGRES_DB
+            - name: NATS_URL
+              value: nats://my-nats:4222
           volumeMounts:
             - mountPath: "/var/app/.env"
               name: env-file

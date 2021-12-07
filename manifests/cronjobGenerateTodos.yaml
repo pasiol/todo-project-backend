@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: todo-generate-todos
+  namespace: todo-project
+spec:
+  schedule: "*/3 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: todo-generator
+              env:
+                - name: API_URL
+                  value: todo-project-backend-svc:8888
+              image: pasiol/todo-generator
+              imagePullPolicy: IfNotPresent
+          restartPolicy: Never
