@@ -22,7 +22,7 @@ spec:
                 path: ".env"
       containers:
         - name: todo-project-backend
-          image: pasiol/todo-project-backend@sha256:fe406069a67fb7b9b45e00cefcaf79f412a876f90e8636935097cb4104ba92ea
+          image: IMAGE_PLACEHOLDER
           env:
             - name: POSTGRES_USER
               valueFrom:
