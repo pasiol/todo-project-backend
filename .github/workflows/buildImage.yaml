@@ -1,4 +1,4 @@
-name: Release gitops demo app
+name: Build a new image
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: pasiol/gitops-demo-app:${{ github.sha }}
+          tags: pasiol/todo-project-backend:${{ github.sha }}
 
   deploy:
     name: Deploy
