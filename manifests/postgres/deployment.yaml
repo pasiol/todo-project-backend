@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: todo-project-backend-db
-          image: pasiol/postgres@sha256:bfc952e11e0202b0a55860d07b202f969da426b1447b0da21a5efdc65ea90a9f
+          image: IMAGE_PLACEHOLDER
           imagePullPolicy: IfNotPresent
           env:
             - name: POSTGRES_USER
