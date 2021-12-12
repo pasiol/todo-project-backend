@@ -7,4 +7,5 @@ data:
   env.properties: |
     POSTGRES_HOST=todo-project-backend-db-svc
     APP_PORT="8888"
-    ALLOWED_ORIGINS=*
+    ALLOWED_ORIGINS=http://dwk.todo-project.local
+    NATS_CHANNEL=todos

@@ -5,7 +5,7 @@ metadata:
     todo-project-backend-svc
   namespace: todo-project
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: todo-project-backend
   ports:

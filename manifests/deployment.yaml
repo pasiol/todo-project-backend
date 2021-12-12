@@ -4,7 +4,7 @@ metadata:
   name: todo-project-backend
   namespace: todo-project
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: todo-project-backend
@@ -22,7 +22,7 @@ spec:
                 path: ".env"
       containers:
         - name: todo-project-backend
-          image: gcr.io/PROJECT_ID/IMAGE
+          image: pasiol/todo-project-backend@sha256:74440d8c188ff56c2fc0e2d9c674ffd391a1b08040086981e734d7b1f8071ab2
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -39,6 +39,8 @@ spec:
                 secretKeyRef:
                   name: postgres
                   key: POSTGRES_DB
+            - name: NATS_URL
+              value: nats://my-nats:4222
           volumeMounts:
             - mountPath: "/var/app/.env"
               name: env-file
@@ -47,7 +49,7 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             httpGet:
-              path: /health
+              path: /todos/health
               port: 8888
           resources:
             limits:
