@@ -10,48 +10,51 @@ spec:
       app: todo-project-backend
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: todo-project-backend
     spec:
-      volumes:
-        - name: env-file
-          configMap:
-            name: todo-db-host
-            items:
-              - key: env.properties
-                path: ".env"
       containers:
-        - name: todo-project-backend
-          image: IMAGE_PLACEHOLDER
-          env:
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_PASSWORD
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_DB
-            - name: NATS_URL
-              value: nats://my-nats:4222
-          volumeMounts:
-            - mountPath: "/var/app/.env"
-              name: env-file
-              subPath: ".env"
-          readinessProbe:
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            httpGet:
-              path: /todos/health
-              port: 8888
-          resources:
-            limits:
-              cpu: "10m"
-              memory: "20Mi"
+      - env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: postgres
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_DB
+              name: postgres
+        - name: NATS_URL
+          value: nats://my-nats:4222
+        image: pasiol/todo-project-backend:2b9780a8d3b3e4ddeca42e599601d187aedc44e1
+        name: todo-project-backend
+        readinessProbe:
+          httpGet:
+            path: /todos/health
+            port: 8888
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 10m
+            memory: 20Mi
+        volumeMounts:
+        - mountPath: /var/app/.env
+          name: env-file
+          subPath: .env
+      volumes:
+      - configMap:
+          items:
+          - key: env.properties
+            path: .env
+          name: todo-db-host
+        name: env-file
+---

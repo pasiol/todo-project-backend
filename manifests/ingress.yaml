@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: todo-project-backend-ingress
+  namespace: todo-project
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /todos
+            pathType: Prefix
+            backend:
+              service:
+                name: todo-project-backend-svc
+                port:
+                  number: 8888
